@@ -17,6 +17,29 @@ Validate at least one reversible write command over Modbus TCP with readback con
 - Inverter firmware and ShineWiLan-X2 firmware recorded in firmware matrix.
 - A known candidate register for reversible control is selected (for example Enable Charge or Enable Discharge), but not yet marked Verified.
 
+## PowerShell Script (recommended)
+Use script:
+- scripts/tcp-safe-write-test.ps1
+
+Example (replace register and values with your chosen reversible test):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-safe-write-test.ps1 \
+	-IpAddress 192.168.1.102 \
+	-UnitId 1 \
+	-WriteRegister <REGISTER_ADDRESS> \
+	-ReadbackRegister <READBACK_REGISTER_ADDRESS> \
+	-TestValue 1 \
+	-RollbackValue 0 \
+	-ConfirmWrite
+```
+
+If readback register does not mirror exact test value immediately, add:
+
+```powershell
+-SkipAfterWriteMatch
+```
+
 ## Test Pattern
 1. Capture baseline
 - Candidate write register address and expected value.
