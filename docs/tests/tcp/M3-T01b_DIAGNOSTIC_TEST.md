@@ -1,7 +1,7 @@
 # M3-T01b Diagnostic Test (TCP Instability Isolation)
 
 Task ID: M3-T01b
-Status: Ready for execution
+Status: In Progress (Wi-Fi executed, wired pending)
 
 ## Objective
 Isolate whether Modbus TCP instability is caused by network path, endpoint connection limits, or timing/polling behavior.
@@ -51,6 +51,17 @@ Compare results to detect WLAN-only instability.
 - Max consecutive failures.
 - Average connect time.
 - Wi-Fi vs wired comparison note.
+
+## Observed Result (2026-07-25, Wi-Fi)
+- Target: 192.168.1.102:502
+- Success: 27/30 (90%)
+- Average connect time: 12813.43 ms
+- Max consecutive failures: 3
+- Verdict: FAIL (keep M3-T02 blocked)
+
+## Next Required Run
+- Execute Test B from a wired client on the same LAN.
+- Use the exact script command and capture full summary output.
 
 ## Decision rules
 - If only Wi-Fi fails: classify as path issue, not inverter protocol issue.

@@ -18,6 +18,7 @@ Purpose: capture the exact firmware context used in tests and map it to observed
 |---|---|---|---|---|---|---|
 | TBD | TBD | Not tested | Not tested | TBD | TBD | Initial baseline |
 | TBD | TBD | Unstable TCP socket (4/20 reachability) | Blocked | Blocked | Blocked | 2026-07-25: Test-NetConnection to 192.168.1.102:502 succeeded once, but stability loop passed only 4/20 attempts. Do not start write tests on this path yet. |
+| TBD | TBD | Wi-Fi improved but still unstable (27/30, 90%) | Blocked | Blocked | Blocked | 2026-07-25: tcp502-stability.ps1 on Wi-Fi: Success 27/30, avg 12813.43 ms, max consecutive failures 3. Still below 95% threshold. |
 
 ## Required Before M3-T02
 - Inverter firmware recorded.
