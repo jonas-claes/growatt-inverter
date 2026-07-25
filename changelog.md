@@ -10,3 +10,5 @@ All notable project and process changes are tracked in this file.
 - Added M3-T01b diagnostic runbook and tcp502-stability.ps1 script.
 - Logged Wi-Fi diagnostic result: 27/30 success (90%), still blocked for write validation.
 - Logged wired LAN diagnostic result: 30/30 success (100%), enabling controlled M3-T02 on wired path.
+- Added tcp-read-register.ps1 helper for baseline register reads before write testing.
+- Updated M3-T02 runbook with concrete first test target: register 3049 (reversible boolean).

@@ -67,6 +67,7 @@ Tasks:
 - 2026-07-25: Initial TCP baseline failed stability threshold (4/20), write validation blocked pending diagnosis.
 - 2026-07-25: Wi-Fi diagnostic improved to 27/30 but still below threshold; wired test required before M3-T02.
 - 2026-07-25: Wired LAN diagnostic passed 30/30, so M3-T02 is unblocked on wired path only.
+- 2026-07-25: First safe FC06 candidate selected for M3-T02: register 3049 with same-register readback.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.

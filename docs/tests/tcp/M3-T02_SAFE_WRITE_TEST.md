@@ -17,9 +17,27 @@ Validate at least one reversible write command over Modbus TCP with readback con
 - Inverter firmware and ShineWiLan-X2 firmware recorded in firmware matrix.
 - A known candidate register for reversible control is selected (for example Enable Charge or Enable Discharge), but not yet marked Verified.
 
+## Recommended First Register
+- Register: 3049 (Allow Grid Charge / AcChargeEnable)
+- Type: U16 boolean
+- Values: 0 = disabled, 1 = enabled
+- Readback: same register 3049
+- Reason: single boolean, reversible, and currently strongest candidate for a first FC06 check on MOD TL3 family path.
+
 ## PowerShell Script (recommended)
 Use script:
 - scripts/tcp-safe-write-test.ps1
+- scripts/tcp-read-register.ps1 (for baseline read)
+
+Step 1, read baseline value of 3049:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 1 -Register 3049
+```
+
+Step 2, choose test/rollback values:
+- If baseline is 0: TestValue=1, RollbackValue=0
+- If baseline is 1: TestValue=0, RollbackValue=1
 
 Example (replace register and values with your chosen reversible test):
 
@@ -27,10 +45,10 @@ Example (replace register and values with your chosen reversible test):
 powershell -ExecutionPolicy Bypass -File .\scripts\tcp-safe-write-test.ps1 \
 	-IpAddress 192.168.1.102 \
 	-UnitId 1 \
-	-WriteRegister <REGISTER_ADDRESS> \
-	-ReadbackRegister <READBACK_REGISTER_ADDRESS> \
-	-TestValue 1 \
-	-RollbackValue 0 \
+	-WriteRegister 3049 \
+	-ReadbackRegister 3049 \
+	-TestValue <FROM_STEP_2> \
+	-RollbackValue <FROM_STEP_2> \
 	-ConfirmWrite
 ```
 
