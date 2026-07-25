@@ -24,16 +24,16 @@ Goal: Build a verified register truth-source.
 
 Tasks:
 - [x] M2-T00 Create register workbook scaffolding (read/write/changelog)
-- [ ] M2-T01 Collect official MOD TL3-XH(BP) register sources
+- [x] M2-T01 Collect official MOD TL3-XH(BP) register sources
 - [ ] M2-T02 Build read register table with scaling and units
 - [ ] M2-T03 Build write register table with safety notes
 
 ### M3 - Connectivity and Write Validation (TCP)
-Status: Planned
+Status: In Progress
 Goal: Confirm what works through ShineWiLan-X2 Modbus TCP.
 
 Tasks:
-- [ ] M3-T01 Verify port 502 connectivity and stability
+- [x] M3-T01 Verify port 502 connectivity and stability (test package prepared)
 - [ ] M3-T02 Validate at least one safe write + readback flow
 - [ ] M3-T03 Document decision: TCP writes usable vs RS485 fallback needed
 
@@ -61,6 +61,8 @@ Tasks:
 - 2026-07-25: Keep AGENTS.md as persistent session bootstrap context.
 - 2026-07-25: Enforce one-task-one-commit cadence with task IDs.
 - 2026-07-25: Introduce register workbook files before source ingestion.
+- 2026-07-25: Source catalog added with confidence scoring before register verification.
+- 2026-07-25: Connectivity test procedure standardized before any write tests.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.
