@@ -13,13 +13,13 @@
 - Conclusion: Keep M3-T02 blocked. Wired comparison required.
 
 ## Run 2
-- Date: TBD
-- Path: Wired client
+- Date: 2026-07-25
+- Path: Wired client (LAN)
 - Target: 192.168.1.102:502
 - Attempts: 30
 - Delay: 1500 ms
-- Success: TBD
-- Avg Connect Time: TBD
-- Max Consecutive Failures: TBD
-- Verdict: TBD
-- Conclusion: TBD
+- Success: 30/30 (100%)
+- Avg Connect Time: not captured
+- Max Consecutive Failures: 0
+- Verdict: PASS
+- Conclusion: TCP path is stable on wired LAN. Keep Wi-Fi path as non-reference for validation.

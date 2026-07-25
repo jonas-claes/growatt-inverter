@@ -9,3 +9,4 @@ All notable project and process changes are tracked in this file.
 - Recorded failed TCP baseline result (4/20 successful checks on port 502).
 - Added M3-T01b diagnostic runbook and tcp502-stability.ps1 script.
 - Logged Wi-Fi diagnostic result: 27/30 success (90%), still blocked for write validation.
+- Logged wired LAN diagnostic result: 30/30 success (100%), enabling controlled M3-T02 on wired path.
