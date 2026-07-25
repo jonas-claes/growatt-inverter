@@ -17,6 +17,25 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+function Get-HighByte {
+  param([int]$Value)
+  return [byte][math]::Floor($Value / 256)
+}
+
+function Get-LowByte {
+  param([int]$Value)
+  return [byte]($Value % 256)
+}
+
+function Combine-UInt16 {
+  param(
+    [byte]$High,
+    [byte]$Low
+  )
+
+  return [UInt16](([int]$High * 256) + [int]$Low)
+}
+
 function New-MbapHeader {
   param(
     [UInt16]$TransactionId,
@@ -27,15 +46,16 @@ function New-MbapHeader {
   [int]$transactionValue = $TransactionId
   [int]$lengthValue = $Pdu.Length + 1
 
-  return [byte[]]@(
-    [byte](($transactionValue -shr 8) -band 0xFF),
-    [byte]($transactionValue -band 0xFF),
-    0x00,
-    0x00,
-    [byte](($lengthValue -shr 8) -band 0xFF),
-    [byte]($lengthValue -band 0xFF),
-    $Unit
-  ) + $Pdu
+  $header = New-Object byte[] 7
+  $header[0] = Get-HighByte $transactionValue
+  $header[1] = Get-LowByte $transactionValue
+  $header[2] = 0x00
+  $header[3] = 0x00
+  $header[4] = Get-HighByte $lengthValue
+  $header[5] = Get-LowByte $lengthValue
+  $header[6] = $Unit
+
+  return $header + $Pdu
 }
 
 function Read-ExactBytes {
@@ -66,12 +86,12 @@ function Invoke-ModbusRequest {
   $Stream.Write($Request, 0, $Request.Length)
 
   $header = Read-ExactBytes -Stream $Stream -Count 7
-  $tx = [UInt16](($header[0] -shl 8) -bor $header[1])
+  $tx = Combine-UInt16 -High $header[0] -Low $header[1]
   if ($tx -ne $ExpectedTransactionId) {
     throw "Transaction mismatch. Expected $ExpectedTransactionId, got $tx."
   }
 
-  $length = [UInt16](($header[4] -shl 8) -bor $header[5])
+  $length = Combine-UInt16 -High $header[4] -Low $header[5]
   if ($length -lt 1) {
     throw "Invalid Modbus length in response."
   }
@@ -88,8 +108,8 @@ $tx = [UInt16]2
 [int]$registerValue = $Register
 $pdu = [byte[]]@(
   0x03,
-  [byte](($registerValue -shr 8) -band 0xFF),
-  [byte]($registerValue -band 0xFF),
+  (Get-HighByte $registerValue),
+  (Get-LowByte $registerValue),
   0x00,
   0x01
 )
@@ -113,7 +133,7 @@ try {
     throw "Unexpected read response format."
   }
 
-  $value = [UInt16]((([int]$res.Pdu[2]) -shl 8) -bor ([int]$res.Pdu[3]))
+  $value = Combine-UInt16 -High $res.Pdu[2] -Low $res.Pdu[3]
 
   [PSCustomObject]@{
     Target = "$IpAddress`:$Port"

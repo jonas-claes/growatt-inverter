@@ -32,6 +32,25 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+function Get-HighByte {
+  param([int]$Value)
+  return [byte][math]::Floor($Value / 256)
+}
+
+function Get-LowByte {
+  param([int]$Value)
+  return [byte]($Value % 256)
+}
+
+function Combine-UInt16 {
+  param(
+    [byte]$High,
+    [byte]$Low
+  )
+
+  return [UInt16](([int]$High * 256) + [int]$Low)
+}
+
 if ($ReadbackRegister -lt 0) {
   $ReadbackRegister = $WriteRegister
 }
@@ -50,15 +69,16 @@ function New-MbapHeader {
   [int]$transactionValue = $TransactionId
   [int]$lengthValue = $Pdu.Length + 1
 
-  return [byte[]]@(
-    [byte](($transactionValue -shr 8) -band 0xFF),
-    [byte]($transactionValue -band 0xFF),
-    0x00,
-    0x00,
-    [byte](($lengthValue -shr 8) -band 0xFF),
-    [byte]($lengthValue -band 0xFF),
-    $Unit
-  ) + $Pdu
+  $header = New-Object byte[] 7
+  $header[0] = Get-HighByte $transactionValue
+  $header[1] = Get-LowByte $transactionValue
+  $header[2] = 0x00
+  $header[3] = 0x00
+  $header[4] = Get-HighByte $lengthValue
+  $header[5] = Get-LowByte $lengthValue
+  $header[6] = $Unit
+
+  return $header + $Pdu
 }
 
 function Read-ExactBytes {
@@ -89,12 +109,12 @@ function Invoke-ModbusRequest {
   $Stream.Write($Request, 0, $Request.Length)
 
   $header = Read-ExactBytes -Stream $Stream -Count 7
-  $tx = [UInt16]((([int]$header[0]) -shl 8) -bor ([int]$header[1]))
+  $tx = Combine-UInt16 -High $header[0] -Low $header[1]
   if ($tx -ne $ExpectedTransactionId) {
     throw "Transaction mismatch. Expected $ExpectedTransactionId, got $tx."
   }
 
-  $length = [UInt16]((([int]$header[4]) -shl 8) -bor ([int]$header[5]))
+  $length = Combine-UInt16 -High $header[4] -Low $header[5]
   if ($length -lt 1) {
     throw "Invalid Modbus length in response."
   }
@@ -118,8 +138,8 @@ function Read-HoldingRegister {
   [int]$addressValue = $Address
   $pdu = [byte[]]@(
     0x03,
-    [byte](($addressValue -shr 8) -band 0xFF),
-    [byte]($addressValue -band 0xFF),
+    (Get-HighByte $addressValue),
+    (Get-LowByte $addressValue),
     0x00,
     0x01
   )
@@ -135,7 +155,7 @@ function Read-HoldingRegister {
     throw "Unexpected read response format."
   }
 
-  return [UInt16]((([int]$res.Pdu[2]) -shl 8) -bor ([int]$res.Pdu[3]))
+  return Combine-UInt16 -High $res.Pdu[2] -Low $res.Pdu[3]
 }
 
 function Write-SingleRegister {
@@ -151,10 +171,10 @@ function Write-SingleRegister {
   [int]$valueValue = $Value
   $pdu = [byte[]]@(
     0x06,
-    [byte](($addressValue -shr 8) -band 0xFF),
-    [byte]($addressValue -band 0xFF),
-    [byte](($valueValue -shr 8) -band 0xFF),
-    [byte]($valueValue -band 0xFF)
+    (Get-HighByte $addressValue),
+    (Get-LowByte $addressValue),
+    (Get-HighByte $valueValue),
+    (Get-LowByte $valueValue)
   )
 
   $req = New-MbapHeader -TransactionId $TransactionId -Unit $Unit -Pdu $pdu
@@ -168,8 +188,8 @@ function Write-SingleRegister {
     throw "Unexpected write response function code: $fc"
   }
 
-  $addrEcho = [UInt16]((([int]$res.Pdu[1]) -shl 8) -bor ([int]$res.Pdu[2]))
-  $valueEcho = [UInt16]((([int]$res.Pdu[3]) -shl 8) -bor ([int]$res.Pdu[4]))
+  $addrEcho = Combine-UInt16 -High $res.Pdu[1] -Low $res.Pdu[2]
+  $valueEcho = Combine-UInt16 -High $res.Pdu[3] -Low $res.Pdu[4]
 
   if ($addrEcho -ne $Address -or $valueEcho -ne $Value) {
     throw "Write echo mismatch. Address echo: $addrEcho, value echo: $valueEcho"
@@ -178,7 +198,7 @@ function Write-SingleRegister {
 
 $tx = [UInt16]1
 function Next-TransactionId {
-  $script:tx = [UInt16]((([int]$script:tx + 1) -band 0xFFFF))
+  $script:tx = [UInt16](($script:tx + 1) % 65536)
   return $script:tx
 }
 
