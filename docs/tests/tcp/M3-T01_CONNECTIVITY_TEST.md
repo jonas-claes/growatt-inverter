@@ -1,7 +1,7 @@
 # M3-T01 Connectivity Test (ShineWiLan-X2 Modbus TCP)
 
 Task ID: M3-T01
-Status: Ready for execution
+Status: Executed (Blocked)
 
 ## Objective
 Verify that the Modbus TCP endpoint is reachable and stable enough for controlled read/write validation.
@@ -15,7 +15,7 @@ Verify that the Modbus TCP endpoint is reachable and stable enough for controlle
 PowerShell:
 
 ```powershell
-Test-NetConnection <LOGGER_IP> -Port 502
+Test-NetConnection 192.168.1.102 -Port 502
 ```
 
 Pass criteria:
@@ -26,7 +26,7 @@ PowerShell loop (20 attempts):
 
 ```powershell
 1..20 | ForEach-Object {
-  $r = Test-NetConnection <LOGGER_IP> -Port 502 -WarningAction SilentlyContinue
+  $r = Test-NetConnection 192.168.1.102 -Port 502 -WarningAction SilentlyContinue
   [PSCustomObject]@{
     Attempt = $_
     Success = $r.TcpTestSucceeded
@@ -41,6 +41,13 @@ Pass criteria:
 ## Step 3: Record Outcome
 - Add result row to firmware matrix.
 - If unstable, mark M3 blocked and investigate network or logger firmware.
+
+## Observed Result (2026-07-25)
+- Logger IP: 192.168.1.102
+- Step 1: Passed (`TcpTestSucceeded = True`)
+- Step 2: Failed stability threshold (4/20 successful)
+- Outcome: TCP path is currently too unstable for read/write validation.
+- Decision: Keep M3-T02 blocked until stability is restored.
 
 ## Output to capture
 - Logger IP

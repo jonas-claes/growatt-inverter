@@ -33,7 +33,8 @@ Status: In Progress
 Goal: Confirm what works through ShineWiLan-X2 Modbus TCP.
 
 Tasks:
-- [x] M3-T01 Verify port 502 connectivity and stability (test package prepared)
+- [x] M3-T01 Verify port 502 connectivity and stability (executed: unstable 4/20)
+- [x] M3-T01b Isolate TCP instability causes (network/logger path) - diagnostic package prepared
 - [ ] M3-T02 Validate at least one safe write + readback flow
 - [ ] M3-T03 Document decision: TCP writes usable vs RS485 fallback needed
 
@@ -63,6 +64,7 @@ Tasks:
 - 2026-07-25: Introduce register workbook files before source ingestion.
 - 2026-07-25: Source catalog added with confidence scoring before register verification.
 - 2026-07-25: Connectivity test procedure standardized before any write tests.
+- 2026-07-25: Initial TCP baseline failed stability threshold (4/20), write validation blocked pending diagnosis.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.
