@@ -47,14 +47,16 @@ function New-MbapHeader {
     [byte[]]$Pdu
   )
 
-  $length = [UInt16]($Pdu.Length + 1)
+  [int]$transactionValue = $TransactionId
+  [int]$lengthValue = $Pdu.Length + 1
+
   return [byte[]]@(
-    ($TransactionId -shr 8) -band 0xFF,
-    $TransactionId -band 0xFF,
+    [byte](($transactionValue -shr 8) -band 0xFF),
+    [byte]($transactionValue -band 0xFF),
     0x00,
     0x00,
-    ($length -shr 8) -band 0xFF,
-    $length -band 0xFF,
+    [byte](($lengthValue -shr 8) -band 0xFF),
+    [byte]($lengthValue -band 0xFF),
     $Unit
   ) + $Pdu
 }
@@ -87,12 +89,12 @@ function Invoke-ModbusRequest {
   $Stream.Write($Request, 0, $Request.Length)
 
   $header = Read-ExactBytes -Stream $Stream -Count 7
-  $tx = [UInt16](($header[0] -shl 8) -bor $header[1])
+  $tx = [UInt16]((([int]$header[0]) -shl 8) -bor ([int]$header[1]))
   if ($tx -ne $ExpectedTransactionId) {
     throw "Transaction mismatch. Expected $ExpectedTransactionId, got $tx."
   }
 
-  $length = [UInt16](($header[4] -shl 8) -bor $header[5])
+  $length = [UInt16]((([int]$header[4]) -shl 8) -bor ([int]$header[5]))
   if ($length -lt 1) {
     throw "Invalid Modbus length in response."
   }
@@ -113,10 +115,11 @@ function Read-HoldingRegister {
     [UInt16]$Address
   )
 
+  [int]$addressValue = $Address
   $pdu = [byte[]]@(
     0x03,
-    ($Address -shr 8) -band 0xFF,
-    $Address -band 0xFF,
+    [byte](($addressValue -shr 8) -band 0xFF),
+    [byte]($addressValue -band 0xFF),
     0x00,
     0x01
   )
@@ -132,7 +135,7 @@ function Read-HoldingRegister {
     throw "Unexpected read response format."
   }
 
-  return [UInt16](($res.Pdu[2] -shl 8) -bor $res.Pdu[3])
+  return [UInt16]((([int]$res.Pdu[2]) -shl 8) -bor ([int]$res.Pdu[3]))
 }
 
 function Write-SingleRegister {
@@ -144,12 +147,14 @@ function Write-SingleRegister {
     [UInt16]$Value
   )
 
+  [int]$addressValue = $Address
+  [int]$valueValue = $Value
   $pdu = [byte[]]@(
     0x06,
-    ($Address -shr 8) -band 0xFF,
-    $Address -band 0xFF,
-    ($Value -shr 8) -band 0xFF,
-    $Value -band 0xFF
+    [byte](($addressValue -shr 8) -band 0xFF),
+    [byte]($addressValue -band 0xFF),
+    [byte](($valueValue -shr 8) -band 0xFF),
+    [byte]($valueValue -band 0xFF)
   )
 
   $req = New-MbapHeader -TransactionId $TransactionId -Unit $Unit -Pdu $pdu
@@ -163,8 +168,8 @@ function Write-SingleRegister {
     throw "Unexpected write response function code: $fc"
   }
 
-  $addrEcho = [UInt16](($res.Pdu[1] -shl 8) -bor $res.Pdu[2])
-  $valueEcho = [UInt16](($res.Pdu[3] -shl 8) -bor $res.Pdu[4])
+  $addrEcho = [UInt16]((([int]$res.Pdu[1]) -shl 8) -bor ([int]$res.Pdu[2]))
+  $valueEcho = [UInt16]((([int]$res.Pdu[3]) -shl 8) -bor ([int]$res.Pdu[4]))
 
   if ($addrEcho -ne $Address -or $valueEcho -ne $Value) {
     throw "Write echo mismatch. Address echo: $addrEcho, value echo: $valueEcho"
@@ -173,7 +178,7 @@ function Write-SingleRegister {
 
 $tx = [UInt16]1
 function Next-TransactionId {
-  $script:tx = [UInt16](($script:tx + 1) -band 0xFFFF)
+  $script:tx = [UInt16]((([int]$script:tx + 1) -band 0xFFFF))
   return $script:tx
 }
 

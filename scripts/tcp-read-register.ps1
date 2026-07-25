@@ -24,14 +24,16 @@ function New-MbapHeader {
     [byte[]]$Pdu
   )
 
-  $length = [UInt16]($Pdu.Length + 1)
+  [int]$transactionValue = $TransactionId
+  [int]$lengthValue = $Pdu.Length + 1
+
   return [byte[]]@(
-    ($TransactionId -shr 8) -band 0xFF,
-    $TransactionId -band 0xFF,
+    [byte](($transactionValue -shr 8) -band 0xFF),
+    [byte]($transactionValue -band 0xFF),
     0x00,
     0x00,
-    ($length -shr 8) -band 0xFF,
-    $length -band 0xFF,
+    [byte](($lengthValue -shr 8) -band 0xFF),
+    [byte]($lengthValue -band 0xFF),
     $Unit
   ) + $Pdu
 }
@@ -83,10 +85,11 @@ function Invoke-ModbusRequest {
 }
 
 $tx = [UInt16]2
+[int]$registerValue = $Register
 $pdu = [byte[]]@(
   0x03,
-  ($Register -shr 8) -band 0xFF,
-  $Register -band 0xFF,
+  [byte](($registerValue -shr 8) -band 0xFF),
+  [byte]($registerValue -band 0xFF),
   0x00,
   0x01
 )
@@ -110,7 +113,7 @@ try {
     throw "Unexpected read response format."
   }
 
-  $value = [UInt16](($res.Pdu[2] -shl 8) -bor $res.Pdu[3])
+  $value = [UInt16]((([int]$res.Pdu[2]) -shl 8) -bor ([int]$res.Pdu[3]))
 
   [PSCustomObject]@{
     Target = "$IpAddress`:$Port"
