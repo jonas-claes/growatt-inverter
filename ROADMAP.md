@@ -19,10 +19,11 @@ Tasks:
 - [x] M1-T03 Add session startup and shutdown checklist
 
 ### M2 - Protocol and Register Foundation
-Status: Planned
+Status: In Progress
 Goal: Build a verified register truth-source.
 
 Tasks:
+- [x] M2-T00 Create register workbook scaffolding (read/write/changelog)
 - [ ] M2-T01 Collect official MOD TL3-XH(BP) register sources
 - [ ] M2-T02 Build read register table with scaling and units
 - [ ] M2-T03 Build write register table with safety notes
@@ -59,6 +60,7 @@ Tasks:
 - 2026-07-25: Include read plus battery write scope in v0.1.
 - 2026-07-25: Keep AGENTS.md as persistent session bootstrap context.
 - 2026-07-25: Enforce one-task-one-commit cadence with task IDs.
+- 2026-07-25: Introduce register workbook files before source ingestion.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.
