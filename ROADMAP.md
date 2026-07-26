@@ -70,6 +70,7 @@ Tasks:
 - 2026-07-25: First safe FC06 candidate selected for M3-T02: register 3049 with same-register readback.
 - 2026-07-26: Probe matrix returned no working read combination; treat TCP as blocked until ShineWiLan-X2 config/firmware path is confirmed.
 - 2026-07-26: Official Loxone example for template 891 uses Comm485 (RS485), so Loxone read success does not imply external TCP Modbus availability.
+- 2026-07-26: Added importable TCP extended-read and experimental battery-control templates for electrician-side isolated validation.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.

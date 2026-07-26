@@ -16,3 +16,13 @@ All notable project and process changes are tracked in this file.
 - Marked TCP validation as blocked when probe matrix returns no valid read path pending device-side configuration checks.
 - Added analysis of official Loxone Growatt template example showing Comm485 (RS485) transport with FC04 registers.
 - Clarified that Loxone read success on template 891 does not prove external Modbus TCP access via ShineWiLan-X2.
+
+## 2026-07-26
+- Extracted official Loxone downloader payloads into XML + desc.json for schema comparison:
+	- docs/tests/tcp/growatt-v2/growatt-inverter-v2.xml
+	- docs/tests/tcp/huawei-tcp/huawei-sun2000-inverter-with-smartdongle-modbus-tcp.xml
+- Added importable extended read template for Growatt TCP:
+	- docs/electrician/templates/MB_Growatt_Inverter_TCP_Extended_Read_FC04_ZeroBased.xml
+- Added importable experimental battery-control template with FC06 write candidates and explicit safety notes:
+	- docs/electrician/templates/MB_Growatt_Inverter_TCP_Battery_Control_Experimental.xml
+- Updated electrician package docs and checklist with the new templates and write-safety sequence.

@@ -20,6 +20,13 @@ Import and test in this order:
 1. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_ZeroBased.xml
 2. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC03_ZeroBased.xml
 3. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_OneBased.xml
+4. docs/electrician/templates/MB_Growatt_Inverter_TCP_Extended_Read_FC04_ZeroBased.xml
+5. docs/electrician/templates/MB_Growatt_Inverter_TCP_Battery_Control_Experimental.xml
+
+## Experimental write caution
+- Use template #5 only after at least one read template works reliably.
+- Validate every write by immediate readback.
+- Apply one write at a time and document rollback value before sending.
 
 ## Minimal read test set
 - 35 (Output power)
