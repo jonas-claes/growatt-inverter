@@ -12,3 +12,5 @@ All notable project and process changes are tracked in this file.
 - Logged wired LAN diagnostic result: 30/30 success (100%), enabling controlled M3-T02 on wired path.
 - Added tcp-read-register.ps1 helper for baseline register reads before write testing.
 - Updated M3-T02 runbook with concrete first test target: register 3049 (reversible boolean).
+- Added tcp-probe-modbus.ps1 and documented blocker flow for "no working Modbus read combination" outcomes.
+- Marked TCP validation as blocked when probe matrix returns no valid read path pending device-side configuration checks.

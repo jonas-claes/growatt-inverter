@@ -35,7 +35,7 @@ Goal: Confirm what works through ShineWiLan-X2 Modbus TCP.
 Tasks:
 - [x] M3-T01 Verify port 502 connectivity and stability (executed: unstable 4/20)
 - [x] M3-T01b Isolate TCP instability causes (network/logger path) - diagnostic package prepared
-- [ ] M3-T02 Validate at least one safe write + readback flow (unblocked on wired path)
+- [ ] M3-T02 Validate at least one safe write + readback flow (blocked when probe returns no working Modbus read combination)
 - [ ] M3-T03 Document decision: TCP writes usable vs RS485 fallback needed
 
 ### M4 - Loxone Template v0.1
@@ -68,6 +68,7 @@ Tasks:
 - 2026-07-25: Wi-Fi diagnostic improved to 27/30 but still below threshold; wired test required before M3-T02.
 - 2026-07-25: Wired LAN diagnostic passed 30/30, so M3-T02 is unblocked on wired path only.
 - 2026-07-25: First safe FC06 candidate selected for M3-T02: register 3049 with same-register readback.
+- 2026-07-26: Probe matrix returned no working read combination; treat TCP as blocked until ShineWiLan-X2 config/firmware path is confirmed.
 
 ## Risks
 - Write registers may be blocked on some ShineWiLan-X2 firmware.

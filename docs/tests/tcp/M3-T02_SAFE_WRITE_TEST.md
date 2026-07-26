@@ -48,6 +48,24 @@ Then retry read with the discovered combination, for example:
 powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 0 -FunctionCode 4 -Register 3049 -ZeroBasedAddress
 ```
 
+If probe shows no working combination:
+
+1. Treat TCP write/read as blocked by device-side config or firmware policy.
+2. Verify ShineWiLan-X2 settings in installer-level UI where available:
+- Third-party / Modbus TCP single-device control enabled.
+- Correct device binding to inverter.
+- Address mode and logger address values as expected by your firmware variant.
+3. Power-cycle order:
+- Restart logger first.
+- Restart inverter second.
+4. Re-run probe with broader matrix:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-probe-modbus.ps1 -IpAddress 192.168.1.102 -UnitIds 0,1,2,10,11,255 -FunctionCodes 3,4 -Registers 0,1,3000,3049
+```
+
+5. If still no response, stop TCP write validation and use RS485 as control path.
+
 Step 2, choose test/rollback values:
 - If baseline is 0: TestValue=1, RollbackValue=0
 - If baseline is 1: TestValue=0, RollbackValue=1
