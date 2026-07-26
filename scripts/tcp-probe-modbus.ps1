@@ -3,9 +3,9 @@ param(
   [string]$IpAddress,
 
   [int]$Port = 502,
-  [int[]]$UnitIds = @(0, 1, 2, 10),
-  [int[]]$FunctionCodes = @(3, 4),
-  [int[]]$Registers = @(0, 1, 3000, 3049),
+  [int[]]$UnitIds = @(1, 0, 2, 10, 11, 255),
+  [int[]]$FunctionCodes = @(4, 3),
+  [int[]]$Registers = @(35, 53, 55, 40, 44, 48, 0, 1, 1014, 3000, 3049),
   [int]$TimeoutMs = 2500
 )
 
@@ -17,7 +17,7 @@ $results = @()
 foreach ($u in $UnitIds) {
   foreach ($fc in $FunctionCodes) {
     foreach ($reg in $Registers) {
-      foreach ($zeroBased in @($false, $true)) {
+      foreach ($zeroBased in @($true, $false)) {
         $args = @(
           "-ExecutionPolicy", "Bypass",
           "-File", ".\\scripts\\tcp-read-register.ps1",

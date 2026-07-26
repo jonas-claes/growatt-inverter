@@ -36,6 +36,12 @@ Step 1, read baseline value of 3049:
 powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 1 -Register 3049
 ```
 
+Loxone 891 first-attempt read (recommended):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 1 -FunctionCode 4 -Register 35 -ZeroBasedAddress
+```
+
 If this read fails, probe combinations automatically:
 
 ```powershell

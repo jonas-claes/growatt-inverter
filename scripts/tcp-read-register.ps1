@@ -12,12 +12,12 @@ param(
   [int]$Register,
 
   [ValidateSet(3, 4)]
-  [int]$FunctionCode = 3,
+  [int]$FunctionCode = 4,
 
   [switch]$ZeroBasedAddress,
 
   [ValidateRange(1, 5)]
-  [int]$Retries = 2,
+  [int]$Retries = 3,
 
   [int]$TimeoutMs = 5000
 )
