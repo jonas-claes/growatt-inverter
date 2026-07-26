@@ -12,6 +12,7 @@ Repository for a structured, multi-session implementation of a Growatt MOD 9000T
 - [Agent Context](AGENTS.md)
 - [Session Checklist](docs/process/SESSION_CHECKLIST.md)
 - [Task Template](docs/process/TASK_TEMPLATE.md)
+- [Importable Test Package for Electrician](docs/electrician/IMPORTABLE_TEST_PACKAGE.md)
 
 ## Workflow Rules
 - Work task-by-task using roadmap IDs (example: M2-T01).

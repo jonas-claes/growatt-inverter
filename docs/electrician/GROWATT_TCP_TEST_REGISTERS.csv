@@ -1,0 +1,8 @@
+Signal,Register,FunctionCode,DataType,Scale,Notes
+Inverter status,0,4,U16,1,Template 891 status field (default/implicit 0)
+Output power,35,4,U32,0.1,Template 891 Output power
+Grid output power L1,40,4,S32,1,Template 891 L1 power
+Grid output power L2,44,4,S32,1,Template 891 L2 power
+Grid output power L3,48,4,S32,1,Template 891 L3 power
+Today generated energy,53,4,U32,0.1,Template 891 today energy
+Total generated energy,55,4,U32,0.1,Template 891 total energy
