@@ -5,10 +5,21 @@ Goal: allow an electrician to test Growatt communication without changing the ex
 ## What is included
 - Importable example project file:
   - docs/tests/tcp/Growatt Inverter Example.Loxone
+- Importable Modbus template XML variants for isolated TCP testing:
+  - docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_ZeroBased.xml
+  - docs/electrician/templates/MB_Growatt_Inverter_TCP_FC03_ZeroBased.xml
+  - docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_OneBased.xml
 - Analysis proof of transport mode in that file:
   - docs/tests/tcp/LOXONE_TEMPLATE_891_ANALYSIS.md
 - Quick register sheet for building a temporary TCP test device:
   - docs/electrician/GROWATT_TCP_TEST_REGISTERS.csv
+
+## Recommended import order
+1. MB_Growatt_Inverter_TCP_FC04_ZeroBased.xml
+2. MB_Growatt_Inverter_TCP_FC03_ZeroBased.xml
+3. MB_Growatt_Inverter_TCP_FC04_OneBased.xml
+
+Use the first variant that returns stable values and keep that as candidate baseline.
 
 ## Important finding
 The official Loxone Growatt template 891 example file is RS485 (Comm485), not a direct Modbus TCP object. So this file is safe for structure/reference, but it is not proof of external TCP acceptance by the logger.

@@ -15,6 +15,12 @@ Scope: test-only, no modification of existing production project.
 - Function code: 04 first, then 03
 - Address mode: zero-based first, then one-based
 
+## Importable XML test templates
+Import and test in this order:
+1. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_ZeroBased.xml
+2. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC03_ZeroBased.xml
+3. docs/electrician/templates/MB_Growatt_Inverter_TCP_FC04_OneBased.xml
+
 ## Minimal read test set
 - 35 (Output power)
 - 53 (Today generated energy)
