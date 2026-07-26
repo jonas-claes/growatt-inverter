@@ -28,11 +28,24 @@ Validate at least one reversible write command over Modbus TCP with readback con
 Use script:
 - scripts/tcp-safe-write-test.ps1
 - scripts/tcp-read-register.ps1 (for baseline read)
+- scripts/tcp-probe-modbus.ps1 (to discover working unit/fc/address mode)
 
 Step 1, read baseline value of 3049:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 1 -Register 3049
+```
+
+If this read fails, probe combinations automatically:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-probe-modbus.ps1 -IpAddress 192.168.1.102
+```
+
+Then retry read with the discovered combination, for example:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\tcp-read-register.ps1 -IpAddress 192.168.1.102 -UnitId 0 -FunctionCode 4 -Register 3049 -ZeroBasedAddress
 ```
 
 Step 2, choose test/rollback values:
