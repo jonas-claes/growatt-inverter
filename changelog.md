@@ -14,3 +14,5 @@ All notable project and process changes are tracked in this file.
 - Updated M3-T02 runbook with concrete first test target: register 3049 (reversible boolean).
 - Added tcp-probe-modbus.ps1 and documented blocker flow for "no working Modbus read combination" outcomes.
 - Marked TCP validation as blocked when probe matrix returns no valid read path pending device-side configuration checks.
+- Added analysis of official Loxone Growatt template example showing Comm485 (RS485) transport with FC04 registers.
+- Clarified that Loxone read success on template 891 does not prove external Modbus TCP access via ShineWiLan-X2.
